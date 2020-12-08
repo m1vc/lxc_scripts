@@ -1,0 +1,14 @@
+[Unit]
+Description=Polimesh Sentry
+
+[Service]
+User=polymesh
+Group=polymesh
+ExecStart=/usr/local/bin/polymesh --name $HOSTNAME --sentry /ip4/10.0.0.10/tcp/30333/p2p/12D3KooWMyRYnC5NikHuMDXJ3tynQitSSp7KCVXE4JHtZyRNvWmm --prometheus-external   
+Restart=always
+RestartSec=120
+LimitNPROC=infinity
+
+[Install]
+WantedBy=multi-user.target
+
