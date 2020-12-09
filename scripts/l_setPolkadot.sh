@@ -6,8 +6,8 @@ else
 	lxc exec $1 -- groupadd --system polkadot 
 	lxc exec $1 -- useradd -s /sbin/nologin --system -g polkadot polkadot 
 	
-	lxc file push ~/storage/polkadot $1/usr/local/bin/
-	lxc file push ~/storage/polkadot.service $1/etc/systemd/system/
+	lxc file push ../storage/polkadot $1/usr/local/bin/
+	lxc file push ../storage/polkadot.service $1/etc/systemd/system/
 
 	lxc exec $1 -- systemctl daemon-reload
 	lxc exec $1 -- systemctl enable polkadot 
