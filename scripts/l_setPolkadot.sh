@@ -8,7 +8,7 @@ else
 	
 	lxc file push ../storage/polkadot $1/usr/local/bin/
 	lxc file push ../storage/polkadot.service $1/etc/systemd/system/
-
+	lxc file push ../storage/hostname.sh $1/usr/local/bin/
 	lxc exec $1 -- systemctl daemon-reload
 	lxc exec $1 -- systemctl enable polkadot 
 	lxc exec $1 -- systemctl start polkadot
