@@ -4,8 +4,9 @@ if [ -z "$1" ] ; then
 	echo "Missing host"
 else
 	lxc exec $1 -- groupadd --system polymesh 
-	lxc exec $1 -- useradd -s /sbin/nologin --system -g polymesh polymesh 
+	lxc exec $1 -- useradd -m -s /sbin/nologin --system -g polymesh polymesh 
 	
+	lxc exec $1 -- sh -c "echo HOSTNAME=$1 > /usr/local/etc/hostname" 
 	lxc file push ../storage/polymesh $1/usr/local/bin/
 	lxc file push ../storage/sentry.service $1/etc/systemd/system/
 	lxc file push ../storage/hostname.sh $1/usr/local/bin/
