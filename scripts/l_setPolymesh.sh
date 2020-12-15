@@ -16,7 +16,7 @@ else
 	lxc exec $1 -- systemctl start operator
 #        lxc config device add $1 p$2c30333 proxy listen=tcp:0.0.0.0:$2 connect=tcp:127.0.0.1:30333
 #       ufw allow $2/tcp
-	lxc start $1
+#	lxc start $1
 	lxc list
 	./l_showNetwork.sh
 OUT=d_$1.sh
