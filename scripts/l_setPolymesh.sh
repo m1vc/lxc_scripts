@@ -4,7 +4,7 @@ if [ -z "$1" ] ; then
 	echo "Missing host"
 else
 	lxc exec $1 -- groupadd --system polymesh 
-	lxc exec $1 -- useradd -s /sbin/nologin --system -g polymesh polymesh 
+	lxc exec $1 -- useradd -m -s /sbin/nologin --system -g polymesh polymesh 
 	
 	lxc file push ../storage/polymesh $1/usr/local/bin/
 	lxc file push ../storage/operator.service $1/etc/systemd/system/
