@@ -4,7 +4,6 @@ Description=Polkadot Validator
 [Service]
 User=polkadot
 Group=polkadot
-ExecStartPre=/usr/local/bin/hostname.sh
 EnvironmentFile=/usr/local/etc/hostname
 ExecStart=/usr/local/bin/polkadot --operator --name $HOSTNAME --prometheus-external 
 Restart=always

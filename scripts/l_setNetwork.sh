@@ -9,6 +9,7 @@ else
 #	lxc config device add $1 p$3c30333 proxy listen=tcp:0.0.0.0:$3 connect=tcp:127.0.0.1:30333
 #	ufw allow $3/tcp
 	lxc start $1
-        lxc list
-        ./l_showNetwork.sh
+	lxc exex $1 -- /usr/local/bin/hostname.sh
+	lxc list
+    ./l_showNetwork.sh
 fi
