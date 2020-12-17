@@ -19,6 +19,10 @@ getpeerID () {
         echo "$peerId"
 }
 
+openPort () {
+	 lxc config device add $1 p$2c30333 proxy listen=tcp:0.0.0.0:30333 connect=tcp:127.0.0.1:$2 -q
+}
+
 # create containers 
 lxd sql global "SELECT b.name, a.value "Size" FROM storage_pools_config a left join storage_pools b WHERE a.storage_pool_id=b.id and key='size'"
 read -p "Select storage: " storage
@@ -32,6 +36,8 @@ done
 lxc config device set $operatorIP eth0 ipv4.address $operatorIP 
 lxc config device set $sentryaName eth0 ipv4.address $sentryaIP 
 lxc config device set $sentrybName eth0 ipv4.address $sentrybIP 
+openPort $sentryaName $sentryaP2Pport
+openPort $sentrybName $sentrybP2Pport
 
 # start the containers
 for Container in $operatorName $sentryaName $sentrybName 
