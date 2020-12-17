@@ -5,8 +5,7 @@ if [ -z "$1" ] ; then
 fi
 
 source "$1"
-echo "$localDir"/polymesh
-ls -lh "$localDir"/polymesh
+
 # functions
 startServices (){ 
 	lxc exec $1 -- systemctl daemon-reload 
@@ -75,13 +74,14 @@ sentryaSystemd=$'#!/bin/bash\n/usr/local/bin/polymesh --sentry --name '"$sentrya
 sentrybSystemd=$'#!/bin/bash\n/usr/local/bin/polymesh --sentry --name '"$sentrybName"
 
 lxc exec $operatorName -- sh -c "echo $operatorSystemd > /home/polymesh/operator.start" 
-lxc exec $sentryaName  -- sh -c "echo "$sentryaSystemd" > /home/polymesh/sentry.start" 
-lxc exec $sentrybName  -- sh -c "echo "$sentrybSystemd" > /home/polymesh/sentry.start" 
+lxc exec $sentryaName  -- sh -c "echo $sentryaSystemd > /home/polymesh/sentry.start" 
+lxc exec $sentrybName  -- sh -c "echo $sentrybSystemd > /home/polymesh/sentry.start" 
 
 for Container in $operatorName $sentryaName $sentrybName 
 do
 	lxc exec $Container -- sh -c "chown polymesh:polymesh /home/polymesh/*.start && chmod +x /home/polymesh/*.start"
 done
+exit 1;
 # Start services to get the peerId
 startServices $operatorName operator
 operatorPeerID=$(getpeerID $operatorName)
@@ -103,9 +103,9 @@ operatorSystemd=$operatorSystemd" --prometheus-external --sentry-nodes /ip4/$sen
 sentryaSystemd=$sentryaSystemd" --prometheus-external --sentry /ip4/$operatorIP/tcp/30333/p2p/$operatorPeerID"
 sentrybSystemd=$sentrybSystemd" --prometheus-external --sentry /ip4/$operatorIP/tcp/30333/p2p/$operatorPeerID"
  
-lxc exec $operatorName -- sh -c 'echo "$operatorSystemd" > /home/polymesh/operator.start' 
-lxc exec $sentryaName  -- sh -c "echo "$sentryaSystemd" > /home/polymesh/sentry.start" 
-lxc exec $sentrybName  -- sh -c "echo "$sentrybSystemd" > /home/polymesh/sentry.start" 
+lxc exec $operatorName -- sh -c "echo $operatorSystemd > /home/polymesh/operator.start" 
+lxc exec $sentryaName  -- sh -c "echo $sentryaSystemd > /home/polymesh/sentry.start" 
+lxc exec $sentrybName  -- sh -c "echo $sentrybSystemd > /home/polymesh/sentry.start" 
 
 for Container in $operatorName $sentryaName $sentrybName 
 do
