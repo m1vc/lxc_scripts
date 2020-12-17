@@ -8,13 +8,13 @@ source "$1"
 
 # functions
 startServices (){ 
-	lxc exec $1 -- systemctl daemon-reload 
-	lxc exec $1 -- systemctl enable $2
-	lxc exec $1 -- systemctl start $2
+	lxc exec $1 -- sh -c "systemctl daemon-reload" 
+	lxc exec $1 -- sh -c "systemctl enable $2"
+	lxc exec $1 -- sh -c "systemctl start $2"
 }
 
 stopServices (){ 
-	lxc exec $1 -- systemctl stop $2 
+	lxc exec $1 -- sh -c "systemctl stop $2" 
 }
 
 getpeerID () {
@@ -70,8 +70,8 @@ echo "Files copied and users created"
 
 # configure systemd services to generate peerId
 operatorSystemd=$'#!/bin/bash\n/usr/local/bin/polymesh --operator --name '"$operatorName"
-sentryaSystemd=$'#!/bin/bash\n/usr/local/bin/polymesh --sentry --name '"$sentryaName"
-sentrybSystemd=$'#!/bin/bash\n/usr/local/bin/polymesh --sentry --name '"$sentrybName"
+sentryaSystemd=$'#!/bin/bash\n/usr/local/bin/polymesh --name '"$sentryaName"
+sentrybSystemd=$'#!/bin/bash\n/usr/local/bin/polymesh --name '"$sentrybName"
 
 lxc exec $operatorName -- sh -c "echo $operatorSystemd > /home/polymesh/operator.start" 
 lxc exec $sentryaName  -- sh -c "echo $sentryaSystemd > /home/polymesh/sentry.start" 
