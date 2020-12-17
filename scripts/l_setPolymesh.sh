@@ -5,6 +5,8 @@ if [ -z "$1" ] ; then
 fi
 
 source "$1"
+echo "$localDir"/polymesh
+ls -lh "$localDir"/polymesh
 # functions
 startServices (){ 
 	lxc exec $1 -- systemctl daemon-reload 

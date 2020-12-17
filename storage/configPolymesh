@@ -7,8 +7,8 @@
     # Sentrya
     sentryaName=m1-sentry1
     sentryaIP=10.0.0.11
-    sentryaP2Pport=30333
+    sentryaP2Pport=30334
     # Sentryb
     sentrybName=m1-sentry2
     sentrybIP=10.0.0.12
-    sentrybP2Pport=30334
+    sentrybP2Pport=30335
