@@ -1,6 +1,8 @@
-##Parameters
+#Parameters
+    # General
     storage=large
     localDir=./storage
+    p2pPort=30333
     # Operator 
     operatorName=m1-operator
     operatorIP=10.0.0.10

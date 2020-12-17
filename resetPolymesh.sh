@@ -10,3 +10,6 @@ do
 	lxc stop $Container 
     lxc delete $Container
 done
+
+sudo ufw delete allow $sentryaP2Pport
+sudo ufw delete allow $sentrybP2Pport

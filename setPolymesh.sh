@@ -25,7 +25,8 @@ getpeerID () {
 }
 
 openPort () {
-	 lxc config device add "$1" p"$2"c30333 proxy listen=tcp:0.0.0.0:"$2" connect=tcp:127.0.0.1:30333 -q
+	 lxc config device add "$1" p"$2"c$3 proxy listen=tcp:0.0.0.0:"$2" connect=tcp:127.0.0.1:$3 -q
+	 sudo ufw allow $2
 }
 
 # Usage: $ ./lxc-exec-all.sh apt update && apt upgrade
@@ -52,8 +53,8 @@ echo "Configuring Network"
 lxc config device set $operatorName eth0 ipv4.address $operatorIP 
 lxc config device set $sentryaName eth0 ipv4.address $sentryaIP 
 lxc config device set $sentrybName eth0 ipv4.address $sentrybIP 
-openPort $sentryaName $sentryaP2Pport
-openPort $sentrybName $sentrybP2Pport
+openPort $sentryaName $sentryaP2Pport $p2pPort
+openPort $sentrybName $sentrybP2Pport $p2pPort
 echo "Network configured"
 # start the containers
 echo "Starting the containers"
@@ -119,4 +120,4 @@ startServices $operatorName operator
 startServices $sentryaName sentry
 startServices $sentrybName sentry
 
-#lxc file push "$localDir"/keystore.tar.gz $operatorName/home/polymesh
+# open firerwall
