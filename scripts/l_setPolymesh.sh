@@ -86,7 +86,7 @@ stopServices $operatorName operator
 
 startServices $sentryaName sentry
 sentryaPeerID=$(getpeerID $sentryaName)
-echo "Sentrya PeerId: ""$sentryaPeerID"
+echo "Sentrya PeerId: "$sentryaPeerID
 stopServices $sentryaName sentry
 
 startServices $sentrybName sentry
@@ -95,18 +95,18 @@ echo "Sentryb PeerId: ""$sentrybPeerID"
 stopServices $sentrybName sentry
 
 # reconfigure systemd services
-lxc exec $operatorName -- sh -c "echo /usr/local/bin/polymesh --operator --name $operatorName --prometheus-external --sentry-nodes /ip4/$sentryaIP/tcp/30333/p2p/$sentryaPeerID /ip4/$sentrybIP/tcp/30333/p2p/$sentrybPeerID > /home/polymesh/operator.start" 
-lxc exec $sentryaName -- sh -c "echo /usr/local/bin/polymesh --name $sentryaName --prometheus-external --sentry /ip4/$operatorIP/tcp/30333/p2p/$operatorPeerID > /home/polymesh/sentry.start"
-lxc exec $sentrybName -- sh -c "echo /usr/local/bin/polymesh --name $sentrybName --prometheus-external --sentry /ip4/$operatorIP/tcp/30333/p2p/$operatorPeerID > /home/polymesh/sentry.start" 
+#lxc exec $operatorName -- sh -c "echo /usr/local/bin/polymesh --operator --name $operatorName --prometheus-external --sentry-nodes /ip4/$sentryaIP/tcp/30333/p2p/$sentryaPeerID /ip4/$sentrybIP/tcp/30333/p2p/$sentrybPeerID > /home/polymesh/operator.start" 
+#lxc exec $sentryaName -- sh -c "echo /usr/local/bin/polymesh --name $sentryaName --prometheus-external --sentry /ip4/$operatorIP/tcp/30333/p2p/$operatorPeerID > /home/polymesh/sentry.start"
+#lxc exec $sentrybName -- sh -c "echo /usr/local/bin/polymesh --name $sentrybName --prometheus-external --sentry /ip4/$operatorIP/tcp/30333/p2p/$operatorPeerID > /home/polymesh/sentry.start" 
 
-for Container in $operatorName $sentryaName $sentrybName 
-do
-	lxc exec $Container -- sh -c "chown polymesh:polymesh /home/polymesh/*.start && chmod +x /home/polymesh/*.start"
-done
+#for Container in $operatorName $sentryaName $sentrybName 
+#do
+#	lxc exec $Container -- sh -c "chown polymesh:polymesh /home/polymesh/*.start && chmod +x /home/polymesh/*.start"
+#done
 
 #restart services
-startServices $operatorName operator
-startServices $sentryaName sentry
-startServices $sentrybName sentry
+#startServices $operatorName operator
+#startServices $sentryaName sentry
+#startServices $sentrybName sentry
 
-lxc file push "$localDir"/keystore.tar.gz $operatorName/home/polymesh
+#lxc file push "$localDir"/keystore.tar.gz $operatorName/home/polymesh
