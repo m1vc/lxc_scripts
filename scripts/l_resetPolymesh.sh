@@ -7,6 +7,6 @@ fi
 source "$1"
 for Container in $operatorName $sentryaName $sentrybName 
 do
-	lxc exec stop $Container 
-    lxc exec delete $Container
+	lxc stop $Container 
+    lxc delete $Container
 done
