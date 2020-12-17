@@ -74,7 +74,7 @@ operatorSystemd=$'#!/bin/bash\n/usr/local/bin/polymesh --operator --name '"$oper
 sentryaSystemd=$'#!/bin/bash\n/usr/local/bin/polymesh --sentry --name '"$sentryaName"
 sentrybSystemd=$'#!/bin/bash\n/usr/local/bin/polymesh --sentry --name '"$sentrybName"
 
-lxc exec $operatorName -- sh -c 'echo "$operatorSystemd" > /home/polymesh/operator.start' 
+lxc exec $operatorName -- sh -c "echo $operatorSystemd > /home/polymesh/operator.start" 
 lxc exec $sentryaName  -- sh -c "echo "$sentryaSystemd" > /home/polymesh/sentry.start" 
 lxc exec $sentrybName  -- sh -c "echo "$sentrybSystemd" > /home/polymesh/sentry.start" 
 
