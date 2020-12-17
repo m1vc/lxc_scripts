@@ -1,6 +1,10 @@
 #!/bin/bash
-source = ./storage/configPolymesh
+if [ -z "$1" ] ; then
+	echo "Missing host";
+	exit 1;
+fi
 
+source = $1
 # functions
 startServices (){ 
 	lxc exec $1 -- systemctl daemon-reload 
