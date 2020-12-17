@@ -28,6 +28,13 @@ openPort () {
 	 lxc config device add "$1" p"$2"c30333 proxy listen=tcp:0.0.0.0:"$2" connect=tcp:127.0.0.1:30333 -q
 }
 
+# Usage: $ ./lxc-exec-all.sh apt update && apt upgrade
+#
+executeInAll() {
+	for container in $(lxc list volatile.last_state.power=RUNNING -c n --format csv); do    
+    	lxc exec "$container" "$@"
+	done
+}
 # create containers 
 lxd sql global "SELECT b.name, a.value "Size" FROM storage_pools_config a left join storage_pools b WHERE a.storage_pool_id=b.id and key='size'"
 read -p "Select storage: " storage
@@ -68,20 +75,15 @@ do
 done
 echo "Files copied and users created"
 
-# configure systemd services to generate peerId
-operatorSystemd=$'#!/bin/bash\n/usr/local/bin/polymesh --operator --name '"$operatorName"
-sentryaSystemd=$'#!/bin/bash\n/usr/local/bin/polymesh --name '"$sentryaName"
-sentrybSystemd=$'#!/bin/bash\n/usr/local/bin/polymesh --name '"$sentrybName"
-
-lxc exec $operatorName -- sh -c "echo $operatorSystemd > /home/polymesh/operator.start" 
-lxc exec $sentryaName  -- sh -c "echo $sentryaSystemd > /home/polymesh/sentry.start" 
-lxc exec $sentrybName  -- sh -c "echo $sentrybSystemd > /home/polymesh/sentry.start" 
+lxc exec $operatorName -- sh -c "echo '#!/bin/bash \n/usr/local/bin/polymesh --operator --name $operatorName' > /home/polymesh/operator.start" 
+lxc exec $sentryaName  -- sh -c "echo '#!/bin/bash \n/usr/local/bin/polymesh --name $sentryaName' > /home/polymesh/sentry.start" 
+lxc exec $sentrybName  -- sh -c "echo '#!/bin/bash \n/usr/local/bin/polymesh --name $sentrybName' > /home/polymesh/sentry.start" 
 
 for Container in $operatorName $sentryaName $sentrybName 
 do
 	lxc exec $Container -- sh -c "chown polymesh:polymesh /home/polymesh/*.start && chmod +x /home/polymesh/*.start"
 done
-exit 1;
+
 # Start services to get the peerId
 startServices $operatorName operator
 operatorPeerID=$(getpeerID $operatorName)
@@ -103,16 +105,16 @@ operatorSystemd=$operatorSystemd" --prometheus-external --sentry-nodes /ip4/$sen
 sentryaSystemd=$sentryaSystemd" --prometheus-external --sentry /ip4/$operatorIP/tcp/30333/p2p/$operatorPeerID"
 sentrybSystemd=$sentrybSystemd" --prometheus-external --sentry /ip4/$operatorIP/tcp/30333/p2p/$operatorPeerID"
  
-lxc exec $operatorName -- sh -c "echo $operatorSystemd > /home/polymesh/operator.start" 
-lxc exec $sentryaName  -- sh -c "echo $sentryaSystemd > /home/polymesh/sentry.start" 
-lxc exec $sentrybName  -- sh -c "echo $sentrybSystemd > /home/polymesh/sentry.start" 
+lxc exec $operatorName -- sh -c "echo '#!/bin/bash \n/usr/local/bin/polymesh --operator --name $operatorName  --prometheus-external --sentry-nodes /ip4/$sentryaIP/tcp/30333/p2p/$sentryaPeerID /ip4/$sentrybIP/tcp/30333/p2p/$sentrybPeerID' > /home/polymesh/operator.start" 
+lxc exec $sentryaName  -- sh -c "echo '#!/bin/bash \n/usr/local/bin/polymesh --name $sentryaName --prometheus-external --sentry /ip4/$operatorIP/tcp/30333/p2p/$operatorPeerID' > /home/polymesh/sentry.start" 
+lxc exec $sentrybName  -- sh -c "echo '#!/bin/bash \n/usr/local/bin/polymesh --name $sentrybName --prometheus-external --sentry /ip4/$operatorIP/tcp/30333/p2p/$operatorPeerID' > /home/polymesh/sentry.start" 
 
 for Container in $operatorName $sentryaName $sentrybName 
 do
 	lxc exec $Container -- sh -c "chown polymesh:polymesh /home/polymesh/*.start && chmod +x /home/polymesh/*.start"
 done
 
-restart services
+#restart services
 startServices $operatorName operator
 startServices $sentryaName sentry
 startServices $sentrybName sentry
