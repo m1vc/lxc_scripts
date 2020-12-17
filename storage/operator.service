@@ -5,7 +5,8 @@ Description=Polimesh Validator
 User=polymesh
 Group=polymesh
 EnvironmentFile=/usr/local/etc/hostname
-ExecStart=/usr/local/bin/polymesh --operator --name $HOSTNAME --reserved-only --sentry-nodes /ip4/10.0.0.11/tcp/30333/p2p/12D3KooWLYWLSQU9krgbsULHeX9jHAVnHQG4sjcd9Y7KwEu5EmsB /ip4/10.0.0.12/tcp/30333/p2p/12D3KooWAnoKyefz98Zcqc7oRwbznhrwP7uDdf29PLPzNNeyBSHJ --prometheus-external
+dianolina
+ExecStart=/usr/local/bin/polymesh --operator --name $HOSTNAME --reserved-only --prometheus-external --sentry-nodes /ip4/10.0.0.11/tcp/30333/p2p/12D3KooWLYWLSQU9krgbsULHeX9jHAVnHQG4sjcd9Y7KwEu5EmsB /ip4/10.0.0.12/tcp/30333/p2p/12D3KooWAnoKyefz98Zcqc7oRwbznhrwP7uDdf29PLPzNNeyBSHJ 
 Restart=always
 RestartSec=120
 LimitNPROC=1000

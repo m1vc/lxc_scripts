@@ -1,0 +1,35 @@
+##Parameters
+    storage=large
+    localDir=./storage/
+    # Operator 
+    operatorName=m1-operator
+    operatorIP=10.0.0.10
+    operatorPrometheusPort=
+    # Sentrya
+    sentryaName=m1-sentry1
+    sentryaIP=10.0.0.11
+    sentryaPrometheusPort=
+    sentryaP2Pport=
+    # Sentryb
+    sentrybName=m1-sentry2
+    sentrybIP=10.0.0.12
+    sentrybPrometheusPort=
+    sentrybP2Pport=
+
+##Functions
+startServices (){ 
+	lxc exec $1 -- systemctl daemon-reload 
+	lxc exec $1 -- systemctl enable $2
+	lxc exec $1 -- systemctl start $2
+}
+
+startServices (){ 
+	lxc exec $1 -- systemctl stop $2 
+}
+
+getpeerID () {
+        lxc config device add $1 p9933 proxy listen=tcp:127.0.0.1:9933 connect=tcp:127.0.0.1:9933 -q
+        peerId=$(curl -s -H "Content-Type: application/json" -d '{"id":1, "jsonrpc":"2.0", "method": "system_networkState"}' http://localhost:9933/  | jq -r .result.peerId)
+        lxc config device remove $1 p9933 -q
+        echo "$peerId"
+}
