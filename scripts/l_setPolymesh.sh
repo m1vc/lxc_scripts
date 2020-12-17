@@ -70,9 +70,13 @@ done
 echo "Files copied and users created"
 
 # configure systemd services to generate peerId
-lxc exec $operatorName -- sh -c "echo /usr/local/bin/polymesh --operator --name $operatorName > /home/polymesh/operator.start" 
-lxc exec $sentryaName  -- sh -c "echo /usr/local/bin/polymesh --sentry --name $sentryaName > /home/polymesh/sentry.start" 
-lxc exec $sentrybName  -- sh -c "echo /usr/local/bin/polymesh --sentry --name $sentrybName > /home/polymesh/sentry.start" 
+operatorSystemd=$'#!/bin/bash\n/usr/local/bin/polymesh --operator --name '"$operatorName"
+sentryaSystemd=$'#!/bin/bash\n/usr/local/bin/polymesh --sentry --name '"$sentryaName"
+sentrybSystemd=$'#!/bin/bash\n/usr/local/bin/polymesh --sentry --name '"$sentrybName"
+
+lxc exec $operatorName -- sh -c "echo "$operatorSystemd" > /home/polymesh/operator.start" 
+lxc exec $sentryaName  -- sh -c "echo "$sentryaSystemd" > /home/polymesh/sentry.start" 
+lxc exec $sentrybName  -- sh -c "echo "$sentrybSystemd" > /home/polymesh/sentry.start" 
 
 for Container in $operatorName $sentryaName $sentrybName 
 do
@@ -95,18 +99,22 @@ echo "Sentryb PeerId: ""$sentrybPeerID"
 stopServices $sentrybName sentry
 
 # reconfigure systemd services
-#lxc exec $operatorName -- sh -c "echo /usr/local/bin/polymesh --operator --name $operatorName --prometheus-external --sentry-nodes /ip4/$sentryaIP/tcp/30333/p2p/$sentryaPeerID /ip4/$sentrybIP/tcp/30333/p2p/$sentrybPeerID > /home/polymesh/operator.start" 
-#lxc exec $sentryaName -- sh -c "echo /usr/local/bin/polymesh --name $sentryaName --prometheus-external --sentry /ip4/$operatorIP/tcp/30333/p2p/$operatorPeerID > /home/polymesh/sentry.start"
-#lxc exec $sentrybName -- sh -c "echo /usr/local/bin/polymesh --name $sentrybName --prometheus-external --sentry /ip4/$operatorIP/tcp/30333/p2p/$operatorPeerID > /home/polymesh/sentry.start" 
+operatorSystemd=$operatorSystemd" --prometheus-external --sentry-nodes /ip4/$sentryaIP/tcp/30333/p2p/$sentryaPeerID /ip4/$sentrybIP/tcp/30333/p2p/$sentrybPeerID"
+sentryaSystemd=$sentryaSystemd" --prometheus-external --sentry /ip4/$operatorIP/tcp/30333/p2p/$operatorPeerID"
+sentrybSystemd=$sentrybSystemd" --prometheus-external --sentry /ip4/$operatorIP/tcp/30333/p2p/$operatorPeerID"
+ 
+lxc exec $operatorName -- sh -c "echo "$operatorSystemd" > /home/polymesh/operator.start" 
+lxc exec $sentryaName  -- sh -c "echo "$sentryaSystemd" > /home/polymesh/sentry.start" 
+lxc exec $sentrybName  -- sh -c "echo "$sentrybSystemd" > /home/polymesh/sentry.start" 
 
-#for Container in $operatorName $sentryaName $sentrybName 
-#do
-#	lxc exec $Container -- sh -c "chown polymesh:polymesh /home/polymesh/*.start && chmod +x /home/polymesh/*.start"
-#done
+for Container in $operatorName $sentryaName $sentrybName 
+do
+	lxc exec $Container -- sh -c "chown polymesh:polymesh /home/polymesh/*.start && chmod +x /home/polymesh/*.start"
+done
 
-#restart services
-#startServices $operatorName operator
-#startServices $sentryaName sentry
-#startServices $sentrybName sentry
+restart services
+startServices $operatorName operator
+startServices $sentryaName sentry
+startServices $sentrybName sentry
 
 #lxc file push "$localDir"/keystore.tar.gz $operatorName/home/polymesh

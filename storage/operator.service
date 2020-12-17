@@ -4,6 +4,7 @@ Description=Polimesh Validator
 [Service]
 User=polymesh
 Group=polymesh
+WorkingDirectory=/home/polymesh
 ExecStart=/home/polymesh/operator.start
 Restart=always
 RestartSec=120
