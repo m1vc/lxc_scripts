@@ -1,6 +1,6 @@
 ##Parameters
     storage=large
-    localDir=../storage
+    localDir=./storage
     # Operator 
     operatorName=m1-operator
     operatorIP=10.0.0.10
