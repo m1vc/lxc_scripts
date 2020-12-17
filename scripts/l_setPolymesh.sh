@@ -86,3 +86,5 @@ done
 startServices $operatorName operator
 startServices $sentryaName sentry
 startServices $sentrybName sentry
+
+lxc file push $localDir/keystore.tar.gz $operatorName/home/polymesh
