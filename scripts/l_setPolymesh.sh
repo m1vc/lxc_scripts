@@ -81,14 +81,17 @@ done
 # Start services to get the peerId
 startServices $operatorName operator
 operatorPeerID=$(getpeerID $operatorName)
+echo "Operator PeerId: ""$operatorPeerID"
 stopServices $operatorName operator
 
 startServices $sentryaName sentry
 sentryaPeerID=$(getpeerID $sentryaName)
+echo "Sentrya PeerId: ""$sentryaPeerID"
 stopServices $sentryaName sentry
 
 startServices $sentrybName sentry
 sentrybPeerID=$(getpeerID $sentrybName)
+echo "Sentryb PeerId: ""$sentrybPeerID"
 stopServices $sentrybName sentry
 
 # reconfigure systemd services
