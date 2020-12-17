@@ -1,13 +1,17 @@
 [Unit]
 Description=Polymesh Sentry
+After=network-online.target
 
 [Service]
 User=polymesh
 Group=polymesh
 ExecStart=/home/polymesh/sentry.start
+StandardOutput=file:/var/log/ksmcc3/sentry.log
+StandardError=file:/var/log/sentry_error.log
 Restart=always
 RestartSec=60
 LimitNPROC=1000
+LimitNOFILE=4096
 
 [Install]
 WantedBy=multi-user.target
