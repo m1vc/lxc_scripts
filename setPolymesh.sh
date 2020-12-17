@@ -1,6 +1,6 @@
 #!/bin/bash
 if [ -z "$1" ] ; then
-	echo "Missing host";
+	echo "Missing config file";
 	exit 1;
 fi
 

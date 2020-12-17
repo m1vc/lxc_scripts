@@ -1,0 +1,13 @@
+[Unit]
+Description=Polymesh Operator
+
+[Service]
+User=polymesh
+Group=polymesh
+ExecStart=/home/polymesh/operator.start
+Restart=always
+RestartSec=60
+LimitNPROC=1000
+
+[Install]
+WantedBy=multi-user.target
