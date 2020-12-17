@@ -4,7 +4,7 @@ if [ -z "$1" ] ; then
 	exit 1;
 fi
 
-source = $1
+source "$1"
 # functions
 startServices (){ 
 	lxc exec $1 -- systemctl daemon-reload 
