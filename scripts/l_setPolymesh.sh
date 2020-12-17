@@ -31,34 +31,41 @@ openPort () {
 lxd sql global "SELECT b.name, a.value "Size" FROM storage_pools_config a left join storage_pools b WHERE a.storage_pool_id=b.id and key='size'"
 read -p "Select storage: " storage
 
+echo "Creating containers"
 for Container in $operatorName $sentryaName $sentrybName 
 do
 	lxc init ubuntu-minimal:bionic $Container -s $storage
 	lxc network attach lxdbr0 $Container eth0 eth0
 done
+echo "Containers created"
+
 # config network  
+echo "Configuring Network"
 lxc config device set $operatorName eth0 ipv4.address $operatorIP 
 lxc config device set $sentryaName eth0 ipv4.address $sentryaIP 
 lxc config device set $sentrybName eth0 ipv4.address $sentrybIP 
 openPort $sentryaName $sentryaP2Pport
 openPort $sentrybName $sentrybP2Pport
-
+echo "Network configured"
 # start the containers
+echo "Starting the containers"
 for Container in $operatorName $sentryaName $sentrybName 
 do
 	lxc start $Container 
 done
-
+echo "Containers started"
 # create users and install files
+echo "Copying files and creating users"
 for Container in $operatorName $sentryaName $sentrybName 
 do
 	lxc exec $Container -- groupadd --system polymesh 
 	lxc exec $Container -- useradd -m -s /sbin/nologin --system -g polymesh polymesh 
-	lxc file push $localDir/polymesh $Container/usr/local/bin/
-	lxc file push $localDir/operator.service $Container/etc/systemd/system/
-	lxc file push $localDir/sentry.service $Container/etc/systemd/system/
+	lxc file push "$localDir"/polymesh $Container/usr/local/bin/
+	lxc file push "$localDir"/operator.service $Container/etc/systemd/system/
+	lxc file push "$localDir"/sentry.service $Container/etc/systemd/system/
 	lxc exec $Container -- systemctl daemon-reload
 done
+echo "Files copied and users created"
 
 # configure systemd services to generate peerId
 lxc exec $operatorName -- sh -c "echo /usr/local/bin/polymesh --operator --name $operatorName > /home/polymesh/operator.start" 
@@ -97,4 +104,4 @@ startServices $operatorName operator
 startServices $sentryaName sentry
 startServices $sentrybName sentry
 
-lxc file push $localDir/keystore.tar.gz $operatorName/home/polymesh
+lxc file push "$localDir"/keystore.tar.gz $operatorName/home/polymesh
