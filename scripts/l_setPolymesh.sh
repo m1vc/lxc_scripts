@@ -71,8 +71,8 @@ echo "Files copied and users created"
 
 # configure systemd services to generate peerId
 lxc exec $operatorName -- sh -c "echo /usr/local/bin/polymesh --operator --name $operatorName > /home/polymesh/operator.start" 
-lxc exec $sentryaName -- sh -c "echo /usr/local/bin/polymesh --sentry --name $sentryaName > /home/polymesh/sentry.start" 
-lxc exec $sentrybName -- sh -c "echo /usr/local/bin/polymesh --sentry --name $sentrybName > /home/polymesh/sentry.start" 
+lxc exec $sentryaName  -- sh -c "echo /usr/local/bin/polymesh --sentry --name $sentryaName > /home/polymesh/sentry.start" 
+lxc exec $sentrybName  -- sh -c "echo /usr/local/bin/polymesh --sentry --name $sentrybName > /home/polymesh/sentry.start" 
 
 for Container in $operatorName $sentryaName $sentrybName 
 do

@@ -4,7 +4,7 @@ Description=Polimesh Validator
 [Service]
 User=polymesh
 Group=polymesh
-ExecStart=ExecStart=/home/polymesh/operator.start
+ExecStart=/home/polymesh/operator.start
 Restart=always
 RestartSec=120
 LimitNPROC=1000
