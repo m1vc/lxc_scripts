@@ -1,5 +1,5 @@
 #!/bin/bash
-source = ./configPolymesh
+source = ../storage/configPolymesh
 
 # functions
 startServices (){ 
