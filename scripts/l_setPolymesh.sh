@@ -37,7 +37,7 @@ do
 	lxc network attach lxdbr0 $Container eth0 eth0
 done
 # config network  
-lxc config device set $operatorIP eth0 ipv4.address $operatorIP 
+lxc config device set $operatorName eth0 ipv4.address $operatorIP 
 lxc config device set $sentryaName eth0 ipv4.address $sentryaIP 
 lxc config device set $sentrybName eth0 ipv4.address $sentrybIP 
 openPort $sentryaName $sentryaP2Pport
