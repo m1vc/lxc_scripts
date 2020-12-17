@@ -106,7 +106,7 @@ stopServices $sentrybName sentry
 
 # reconfigure systemd services
 
-lxc exec $operatorName -- sh -c "echo '#!/bin/bash \n/usr/local/bin/polymesh --operator --name $operatorName  --prometheus-external --sentry-nodes /ip4/$sentryaIP/tcp/30333/p2p/$sentryaPeerID /ip4/$sentrybIP/tcp/30333/p2p/$sentrybPeerID' > /home/polymesh/operator.start" 
+lxc exec $operatorName -- sh -c "echo '#!/bin/bash \n/usr/local/bin/polymesh --operator --name $operatorName  --prometheus-external --reserved-only --reserved-nodes /ip4/$sentryaIP/tcp/30333/p2p/$sentryaPeerID /ip4/$sentrybIP/tcp/30333/p2p/$sentrybPeerID' > /home/polymesh/operator.start" 
 lxc exec $operatorName -- sh -c "chown polymesh:polymesh /home/polymesh/*.start && chmod +x /home/polymesh/*.start"
 
 #restart services
