@@ -1,5 +1,6 @@
 [Unit]
 Description=Polymesh Operator
+After=network-online.target
 
 [Service]
 User=polymesh

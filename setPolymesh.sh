@@ -77,19 +77,22 @@ done
 echo "Files copied and users created"
 
 lxc exec $operatorName -- sh -c "echo '#!/bin/bash \n/usr/local/bin/polymesh --operator --name $operatorName' > /home/polymesh/operator.start" 
-lxc exec $sentryaName  -- sh -c "echo '#!/bin/bash \n/usr/local/bin/polymesh --name $sentryaName' > /home/polymesh/sentry.start" 
-lxc exec $sentrybName  -- sh -c "echo '#!/bin/bash \n/usr/local/bin/polymesh --name $sentrybName' > /home/polymesh/sentry.start" 
+lxc exec $operatorName -- sh -c "chown polymesh:polymesh /home/polymesh/*.start && chmod +x /home/polymesh/*.start"
 
-for Container in $operatorName $sentryaName $sentrybName 
-do
-	lxc exec $Container -- sh -c "chown polymesh:polymesh /home/polymesh/*.start && chmod +x /home/polymesh/*.start"
-done
-
-# Start services to get the peerId
+# Start services to get the operator peerId
 startServices $operatorName operator
 operatorPeerID=$(getpeerID $operatorName)
 echo "Operator PeerId: ""$operatorPeerID"
 stopServices $operatorName operator
+
+# Reconfigure systemd services for the sentry nodes
+lxc exec $sentryaName  -- sh -c "echo '#!/bin/bash \n/usr/local/bin/polymesh --name $sentryaName --prometheus-external --sentry /ip4/$operatorIP/tcp/30333/p2p/$operatorPeerID' > /home/polymesh/sentry.start" 
+lxc exec $sentrybName  -- sh -c "echo '#!/bin/bash \n/usr/local/bin/polymesh --name $sentrybName --prometheus-external --sentry /ip4/$operatorIP/tcp/30333/p2p/$operatorPeerID' > /home/polymesh/sentry.start" 
+
+for Container in $sentryaName $sentrybName 
+do
+	lxc exec $Container -- sh -c "chown polymesh:polymesh /home/polymesh/*.start && chmod +x /home/polymesh/*.start"
+done
 
 startServices $sentryaName sentry
 sentryaPeerID=$(getpeerID $sentryaName)
@@ -102,22 +105,11 @@ echo "Sentryb PeerId: ""$sentrybPeerID"
 stopServices $sentrybName sentry
 
 # reconfigure systemd services
-operatorSystemd=$operatorSystemd" --prometheus-external --sentry-nodes /ip4/$sentryaIP/tcp/30333/p2p/$sentryaPeerID /ip4/$sentrybIP/tcp/30333/p2p/$sentrybPeerID"
-sentryaSystemd=$sentryaSystemd" --prometheus-external --sentry /ip4/$operatorIP/tcp/30333/p2p/$operatorPeerID"
-sentrybSystemd=$sentrybSystemd" --prometheus-external --sentry /ip4/$operatorIP/tcp/30333/p2p/$operatorPeerID"
- 
-lxc exec $operatorName -- sh -c "echo '#!/bin/bash \n/usr/local/bin/polymesh --operator --name $operatorName  --prometheus-external --sentry-nodes /ip4/$sentryaIP/tcp/30333/p2p/$sentryaPeerID /ip4/$sentrybIP/tcp/30333/p2p/$sentrybPeerID' > /home/polymesh/operator.start" 
-lxc exec $sentryaName  -- sh -c "echo '#!/bin/bash \n/usr/local/bin/polymesh --name $sentryaName --prometheus-external --sentry /ip4/$operatorIP/tcp/30333/p2p/$operatorPeerID' > /home/polymesh/sentry.start" 
-lxc exec $sentrybName  -- sh -c "echo '#!/bin/bash \n/usr/local/bin/polymesh --name $sentrybName --prometheus-external --sentry /ip4/$operatorIP/tcp/30333/p2p/$operatorPeerID' > /home/polymesh/sentry.start" 
 
-for Container in $operatorName $sentryaName $sentrybName 
-do
-	lxc exec $Container -- sh -c "chown polymesh:polymesh /home/polymesh/*.start && chmod +x /home/polymesh/*.start"
-done
+lxc exec $operatorName -- sh -c "echo '#!/bin/bash \n/usr/local/bin/polymesh --operator --name $operatorName  --prometheus-external --sentry-nodes /ip4/$sentryaIP/tcp/30333/p2p/$sentryaPeerID /ip4/$sentrybIP/tcp/30333/p2p/$sentrybPeerID' > /home/polymesh/operator.start" 
+lxc exec $operatorName -- sh -c "chown polymesh:polymesh /home/polymesh/*.start && chmod +x /home/polymesh/*.start"
 
 #restart services
 startServices $operatorName operator
 startServices $sentryaName sentry
 startServices $sentrybName sentry
-
-# open firerwall
