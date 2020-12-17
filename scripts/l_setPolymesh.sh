@@ -34,7 +34,7 @@ read -p "Select storage: " storage
 for Container in $operatorName $sentryaName $sentrybName 
 do
 	lxc init ubuntu-minimal:bionic $Container -s $storage
-	lxc network attach $Container lxdbr0 eth0 eth0
+	lxc network attach lxdbr0 $Container eth0 eth0
 done
 # config network  
 lxc config device set $operatorIP eth0 ipv4.address $operatorIP 
