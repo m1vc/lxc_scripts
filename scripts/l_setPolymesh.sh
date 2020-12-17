@@ -26,7 +26,7 @@ getpeerID () {
 }
 
 openPort () {
-	 lxc config device add $1 p$2c30333 proxy listen=tcp:0.0.0.0:30333 connect=tcp:127.0.0.1:$2 -q
+	 lxc config device add "$1" p"$2"c30333 proxy listen=tcp:0.0.0.0:"$2" connect=tcp:127.0.0.1:30333 -q
 }
 
 # create containers 
