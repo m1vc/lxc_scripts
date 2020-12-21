@@ -6,46 +6,7 @@ if [ -z "$1" ] ; then
 fi
 
 source "$1"
-PS3="Select the step: "
 
-select opt in 'Create containers' 'Destroy containers' 'Configure network' 'Start containers' 'Stop containers' 'Install binaries' 'Initialise operator' 'Initialise sentries' 'Configure operator' 'Quit'; do
-
-  case $opt in
-    'Create containers')
-    	createContainers
-		;;
-	'Destroy containers')
-		destroyContainers
-		;;	
-    'Configure network')
-    	configureNetwork
-		;;
-    'Start containers')
-    	startContainers
-		;;
-    'Stop containers')
-    	stopContainers
-		;;
-	'Install binaries')
-		installBinaries
-    	;;
-	'Initialise operator')
-    	initialiseOperator
-		;;
-	'Initialise sentries')
-    	initialiseSentry
-		;;
-	'Configure operator')
-		configureOperator
-		;;
-    quit)
-      break
-      ;;
-    *)
-      echo "Invalid option $REPLY"
-      ;;
-  esac
-done
 # functions
 startServices (){ 
 	lxc exec $1 -- sh -c "systemctl daemon-reload" 
@@ -177,3 +138,44 @@ configureOperator(){
 	lxc exec $operatorName -- sh -c "chown polymesh:polymesh /home/polymesh/*.start && chmod +x /home/polymesh/*.start"
 	startServices $operatorName operator
 }
+
+PS3="Select the step: "
+
+select opt in 'Create containers' 'Destroy containers' 'Configure network' 'Start containers' 'Stop containers' 'Install binaries' 'Initialise operator' 'Initialise sentries' 'Configure operator' 'Quit'; do
+
+  case $opt in
+    'Create containers')
+    	createContainers
+		;;
+	'Destroy containers')
+		destroyContainers
+		;;	
+    'Configure network')
+    	configureNetwork
+		;;
+    'Start containers')
+    	startContainers
+		;;
+    'Stop containers')
+    	stopContainers
+		;;
+	'Install binaries')
+		installBinaries
+    	;;
+	'Initialise operator')
+    	initialiseOperator
+		;;
+	'Initialise sentries')
+    	initialiseSentry
+		;;
+	'Configure operator')
+		configureOperator
+		;;
+    quit)
+      break
+      ;;
+    *)
+      echo "Invalid option $REPLY"
+      ;;
+  esac
+done
