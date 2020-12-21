@@ -8,12 +8,15 @@ fi
 source "$1"
 PS3="Select the step: "
 
-select opt in 'Create containers' 'Configure network' 'Start containers' 'Stop containers' 'Install binaries' 'Initialise operator' 'Initialise sentries' 'Configure operator' 'Quit'; do
+select opt in 'Create containers' 'Destroy containers' 'Configure network' 'Start containers' 'Stop containers' 'Install binaries' 'Initialise operator' 'Initialise sentries' 'Configure operator' 'Quit'; do
 
   case $opt in
     'Create containers')
     	createContainers
 		;;
+	'Destroy containers')
+		destroyContainers
+		;;	
     'Configure network')
     	configureNetwork
 		;;
@@ -80,6 +83,16 @@ createContainers() {
 		lxc network attach lxdbr0 $Container eth0 eth0
 	done
 	echo "Containers created"
+}
+
+destroyContainers(){
+	for Container in $operatorName $sentryaName $sentrybName 
+	do
+		lxc stop $Container 
+    	lxc delete $Container
+	done
+	sudo ufw delete allow $sentryaP2Pport
+	sudo ufw delete allow $sentrybP2Pport
 }
 ## Configure network  
 configureNetwork() {
