@@ -8,7 +8,7 @@ fi
 source "$1"
 PS3="Select the step: "
 
-select opt in 'Create containers' 'Configure network' 'Start containers' 'Stop containers' 'Install binaries' 'Initialise operator' 'Initialise sentries' 'Configure operator'; do
+select opt in 'Create containers' 'Configure network' 'Start containers' 'Stop containers' 'Install binaries' 'Initialise operator' 'Initialise sentries' 'Configure operator' 'Quit'; do
 
   case $opt in
     'Create containers')
