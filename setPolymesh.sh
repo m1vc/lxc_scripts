@@ -85,7 +85,7 @@ createContainers() {
 	echo "Containers created"
 }
 
-destroyContainers(){
+destroyContainers() {
 	for Container in $operatorName $sentryaName $sentrybName 
 	do
 		lxc stop $Container 
