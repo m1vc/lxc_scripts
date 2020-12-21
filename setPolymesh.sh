@@ -171,7 +171,7 @@ select opt in 'Create containers' 'Destroy containers' 'Configure network' 'Star
 	'Configure operator')
 		configureOperator
 		;;
-    quit)
+    Quit)
       break
       ;;
     *)
