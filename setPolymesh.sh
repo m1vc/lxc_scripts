@@ -32,7 +32,7 @@ select opt in 'Create containers' 'Configure network' 'Start containers' 'Stop c
 	'Initialise sentries')
     	initialiseSentry
 		;;
-	'Configure operator'
+	'Configure operator')
 		configureOperator
 		;;
     quit)
