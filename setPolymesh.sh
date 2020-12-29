@@ -137,16 +137,16 @@ configureOperator(){
 }
 
 submenuNetwork () {
-  local PS3='Please enter sub option: '
+  local PS3="Select option: "
   local options=("Configure network" "Show network" "Back")
   local opt
   select opt in "${options[@]}"
   do
       case $opt in
-        'Configure network')
+        "Configure network")
     		configureNetwork
 			;;
-    	'Show network')
+    	"Show network")
     		showNetwork
 			;;
         "Back")
@@ -157,44 +157,46 @@ submenuNetwork () {
   done
 }
 
-
-PS3="Select the step: "
-
-select opt in 'Create containers' 'Destroy containers' 'Network' 'Start containers' 'Stop containers' 'Install binaries' 'Initialise operator' 'Initialise sentries' 'Configure operator' 'Quit'; do
-
-  case $opt in
-    'Create containers')
-    	createContainers
-		;;
-	'Destroy containers')
-		destroyContainers
-		;;	
-    'Network')
-    	submenuNetwork
-		;;
-    'Start containers')
-    	startContainers
-		;;
-    'Stop containers')
-    	stopContainers
-		;;
-	'Install binaries')
-		installBinaries
-    	;;
-	'Initialise operator')
-    	initialiseOperator
-		;;
-	'Initialise sentries')
-    	initialiseSentry
-		;;
-	'Configure operator')
-		configureOperator
-		;;
-    Quit)
-      break
-      ;;
-    *)
-      echo "Invalid option $REPLY"
-      ;;
-  esac
+while true
+do
+	options=("Create containers" "Destroy containers" "Network" "Start containers" "Stop containers" "Install binaries" "Initialise operator" "Initialise sentries" "Configure operator" "Quit")
+	PS3="Select option: "
+	select opt in "${options[@]}"
+		do
+		case $opt in
+			"Create containers")
+				createContainers
+				;;
+			"Destroy containers")
+				destroyContainers
+				;;	
+			"Network")
+				submenuNetwork
+				;;
+			"Start containers")
+				startContainers
+				;;
+			"Stop containers")
+				stopContainers
+				;;
+			"Install binaries")
+				installBinaries
+				;;
+			"Initialise operator")
+				initialiseOperator
+				;;
+			"Initialise sentries")
+				initialiseSentry
+				;;
+			"Configure operator")
+				configureOperator
+				;;
+			Quit)
+			break
+			;;
+			*)
+			echo "Invalid option $REPLY"
+			;;
+		esac
+		done
 done
