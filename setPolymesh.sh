@@ -169,7 +169,7 @@ submenuContainers () {
 while true
 do
 	local PS3="Containers: "
-	local options=("Create containers" "Destroy containers" "List containers" "Back")
+	local options=("Create containers" "Destroy container" "Destroy all containers" "List containers" "Back")
 	local opt
 	select opt in "${options[@]}"
 	do
