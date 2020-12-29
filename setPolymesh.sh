@@ -192,12 +192,13 @@ do
 				initialiseSentry; break
 				;;
 			"Configure operator")
-				configureOperator; break
+				configureOperator
+				break 2
 				;;
 			"Quit")
 			break
 			;;
-			*)
+			"*")
 			echo "Invalid option $REPLY"
 			;;
 		esac
