@@ -194,7 +194,7 @@ do
 			"Configure operator")
 				configureOperator; break
 				;;
-			Quit)
+			"Quit")
 			break
 			;;
 			*)
