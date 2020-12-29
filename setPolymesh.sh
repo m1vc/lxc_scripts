@@ -137,17 +137,17 @@ configureOperator(){
 }
 
 submenuNetwork () {
-  local PS3="Select option: "
+  local PS3="Network: "
   local options=("Configure network" "Show network" "Back")
   local opt
   select opt in "${options[@]}"
   do
       case $opt in
         "Configure network")
-    		configureNetwork
+    		configureNetwork; break
 			;;
     	"Show network")
-    		showNetwork
+    		showNetwork; break
 			;;
         "Back")
         	return
@@ -165,31 +165,31 @@ do
 		do
 		case $opt in
 			"Create containers")
-				createContainers
+				createContainers; break
 				;;
 			"Destroy containers")
-				destroyContainers
+				destroyContainers; break
 				;;	
 			"Network")
 				submenuNetwork; break
 				;;
 			"Start containers")
-				startContainers
+				startContainers; break
 				;;
 			"Stop containers")
-				stopContainers
+				stopContainers; break
 				;;
 			"Install binaries")
-				installBinaries
+				installBinaries; break
 				;;
 			"Initialise operator")
-				initialiseOperator
+				initialiseOperator; break
 				;;
 			"Initialise sentries")
-				initialiseSentry
+				initialiseSentry; break
 				;;
 			"Configure operator")
-				configureOperator
+				configureOperator; break
 				;;
 			Quit)
 			break
