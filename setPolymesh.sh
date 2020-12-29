@@ -160,7 +160,7 @@ do
 done
 }
 
-submenuNetwork () {
+submenuContainers () {
 while true
 do
 	local PS3="Containers: "
@@ -190,7 +190,7 @@ done
 
 while true
 do
-	options=("Create containers" "Destroy containers" "Network" "Start containers" "Stop containers" "Install binaries" "Initialise operator" "Initialise sentries" "Configure operator" "Quit")
+	options=("Containers" "Network" "Start containers" "Stop containers" "Install binaries" "Initialise operator" "Initialise sentries" "Configure operator" "Quit")
 	PS3="Select option: "
 	select opt in "${options[@]}"
 		do
@@ -198,11 +198,8 @@ do
 			"Network")
 				submenuNetwork; break
 				;;
-			"Start containers")
-				startContainers; break
-				;;
-			"Stop containers")
-				stopContainers; break
+			"Containers")
+				submenuContainers; break
 				;;
 			"Install binaries")
 				installBinaries; break
