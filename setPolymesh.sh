@@ -37,13 +37,11 @@ createContainers() {
 	lxd sql global "SELECT b.name, a.value "Size" FROM storage_pools_config a left join storage_pools b WHERE a.storage_pool_id=b.id and key='size'"
 	read -p "Select storage: " storage
 
-	echo "Creating containers"
 	for Container in $operatorName $sentryaName $sentrybName 
 	do
 		lxc init ubuntu-minimal:bionic $Container -s $storage
 		lxc network attach lxdbr0 $Container eth0 eth0
 	done
-	echo "Containers created"
 }
 
 destroyContainers() {
@@ -57,18 +55,20 @@ destroyContainers() {
 }
 ## Configure network  
 configureNetwork() {
-	echo "Configuring Network"
 	lxc config device set $operatorName eth0 ipv4.address $operatorIP 
 	lxc config device set $sentryaName eth0 ipv4.address $sentryaIP 
 	lxc config device set $sentrybName eth0 ipv4.address $sentrybIP 
 	openPort $sentryaName $sentryaP2Pport $p2pPort
 	openPort $sentrybName $sentrybP2Pport $p2pPort
-	echo "Network configured"
+}
+
+showNetwork() {
+	sudo ufw status
+	lxd sql global "SELECT  c.name, a.name, b.value FROM instances_devices a LEFT JOIN instances_devices_config b LEFT JOIN instances c WHERE a.id=b.instance_device_id AND a.instance_id = c.id AND a.type=8 AND b.key='listen';"
 }
 
 ## Start containers
 startContainers(){
-	echo "Starting the containers"
 	for Container in $operatorName $sentryaName $sentrybName 
 	do
 		lxc start $Container 
@@ -76,7 +76,6 @@ startContainers(){
 }
 ## Stop containers
 stopContainers(){
-	echo "Starting the containers"
 	for Container in $operatorName $sentryaName $sentrybName 
 	do
 		lxc stop $Container 
@@ -86,7 +85,6 @@ stopContainers(){
 
 ## Install binaries and create users
 installBinaries(){
-	echo "Copying files and creating users"
 	for Container in $operatorName $sentryaName $sentrybName 
 	do
 		lxc exec $Container -- groupadd --system polymesh 
@@ -96,7 +94,6 @@ installBinaries(){
 		lxc file push "$localDir"/sentry.service $Container/etc/systemd/system/
 		lxc exec $Container -- systemctl daemon-reload
 	done
-	echo "Files copied and users created"
 }
 ## Initialise Operator
 initialiseOperator(){
@@ -139,9 +136,31 @@ configureOperator(){
 	startServices $operatorName operator
 }
 
+submenuNetwork () {
+  local PS3='Please enter sub option: '
+  local options=("Configure network" "Show network" "Back")
+  local opt
+  select opt in "${options[@]}"
+  do
+      case $opt in
+        'Configure network')
+    		configureNetwork
+			;;
+    	'Show network')
+    		showNetwork
+			;;
+        "Back")
+        	return
+            ;;
+          *) echo "invalid option $REPLY";;
+      esac
+  done
+}
+
+
 PS3="Select the step: "
 
-select opt in 'Create containers' 'Destroy containers' 'Configure network' 'Start containers' 'Stop containers' 'Install binaries' 'Initialise operator' 'Initialise sentries' 'Configure operator' 'Quit'; do
+select opt in 'Create containers' 'Destroy containers' 'Network' 'Start containers' 'Stop containers' 'Install binaries' 'Initialise operator' 'Initialise sentries' 'Configure operator' 'Quit'; do
 
   case $opt in
     'Create containers')
@@ -150,8 +169,8 @@ select opt in 'Create containers' 'Destroy containers' 'Configure network' 'Star
 	'Destroy containers')
 		destroyContainers
 		;;	
-    'Configure network')
-    	configureNetwork
+    'Network')
+    	submenuNetwork
 		;;
     'Start containers')
     	startContainers
