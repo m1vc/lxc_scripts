@@ -137,24 +137,27 @@ configureOperator(){
 }
 
 submenuNetwork () {
-  local PS3="Network: "
-  local options=("Configure network" "Show network" "Back")
-  local opt
-  select opt in "${options[@]}"
-  do
-      case $opt in
-        "Configure network")
-    		configureNetwork; break
-			;;
-    	"Show network")
-    		showNetwork; break
-			;;
-        "Back")
-        	return
-            ;;
-          *) echo "invalid option $REPLY";;
-      esac
-  done
+while true
+do
+	local PS3="Network: "
+	local options=("Configure network" "Show network" "Back")
+	local opt
+	select opt in "${options[@]}"
+	do
+		case $opt in
+			"Configure network")
+				configureNetwork; break
+				;;
+			"Show network")
+				showNetwork; break
+				;;
+			"Back")
+				return
+				;;
+			*) echo "invalid option $REPLY";;
+		esac
+	done
+done
 }
 
 while true
