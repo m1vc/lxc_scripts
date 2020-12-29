@@ -160,12 +160,14 @@ do
 done
 }
 
+submenuNetwork () {
 while true
 do
-	options=("Create containers" "Destroy containers" "Network" "Start containers" "Stop containers" "Install binaries" "Initialise operator" "Initialise sentries" "Configure operator" "Quit")
-	PS3="Select option: "
+	local PS3="Containers: "
+	local options=("Create containers" "Destroy containers" "List containers" "Back")
+	local opt
 	select opt in "${options[@]}"
-		do
+	do
 		case $opt in
 			"Create containers")
 				createContainers; break
@@ -173,6 +175,26 @@ do
 			"Destroy containers")
 				destroyContainers; break
 				;;	
+			"List containers")
+				lxc list; break
+				;;	
+			"Back")
+				return
+				;;
+			*) echo "invalid option $REPLY";;
+		esac
+	done
+done
+}
+
+
+while true
+do
+	options=("Create containers" "Destroy containers" "Network" "Start containers" "Stop containers" "Install binaries" "Initialise operator" "Initialise sentries" "Configure operator" "Quit")
+	PS3="Select option: "
+	select opt in "${options[@]}"
+		do
+		case $opt in
 			"Network")
 				submenuNetwork; break
 				;;
