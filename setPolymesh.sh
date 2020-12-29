@@ -171,7 +171,7 @@ do
 				destroyContainers
 				;;	
 			"Network")
-				submenuNetwork
+				submenuNetwork; break
 				;;
 			"Start containers")
 				startContainers
