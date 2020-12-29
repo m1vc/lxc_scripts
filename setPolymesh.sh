@@ -44,7 +44,7 @@ createContainers() {
 	done
 }
 
-destroyContainers() {
+destroyAllContainers() {
 	for Container in $operatorName $sentryaName $sentrybName 
 	do
 		lxc stop $Container 
@@ -52,6 +52,11 @@ destroyContainers() {
 	done
 	sudo ufw delete allow $sentryaP2Pport
 	sudo ufw delete allow $sentrybP2Pport
+}
+
+destroyContainer() {
+	lxc stop $1 
+	delete $1
 }
 ## Configure network  
 configureNetwork() {
@@ -172,8 +177,13 @@ do
 			"Create containers")
 				createContainers; break
 				;;
-			"Destroy containers")
-				destroyContainers; break
+			"Destroy container")
+				echo "Name of container to be destroyed"
+				read containerName
+				destroyContainer $containerName; break
+				;;	
+			"Destroy all containers")
+				destroyAllContainers; break
 				;;	
 			"List containers")
 				lxc list; break
