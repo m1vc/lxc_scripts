@@ -193,13 +193,13 @@ do
 				;;
 			"Configure operator")
 				configureOperator
-				break 2
+				break
 				;;
 			"Quit")
-			break
+			break 2
 			;;
-			"*")
-			echo "Invalid option $REPLY"
+			*)
+			echo "Invalid option $REPLY"; break
 			;;
 		esac
 		done
