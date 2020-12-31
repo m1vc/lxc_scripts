@@ -1,10 +1,9 @@
 #!/bin/bash
-#!/bin/bash
 if [ -z "$1" ] ; then
 	echo "Missing config file";
 	exit 1;
 fi
-
+COLUMNS=1
 source "$1"
 
 # functions
@@ -56,7 +55,7 @@ destroyAllContainers() {
 
 destroyContainer() {
 	lxc stop $1 
-	delete $1
+	lxc delete $1
 }
 ## Configure network  
 configureNetwork() {
