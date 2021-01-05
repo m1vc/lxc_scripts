@@ -75,15 +75,13 @@ showNetwork() {
 
 removeNetwork() {
 	sudo ufw status numbered
-	while port= read -p "Select port or x to exit: " 
+	
+	while [ $port <> "x" ] 
 	do	
 		sudo ufw status numbered
-		if [ "$port" == "x" ]; then
-			break
-		else
-			echo $port
-			#sudo ufw delete $port
-		fi  
+		port= read -p "Select port or x to exit: "
+		echo $port
+		#sudo ufw delete $port
 	done
 }
 ## Start containers
