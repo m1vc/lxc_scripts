@@ -74,13 +74,15 @@ showNetwork() {
 }
 
 removeNetwork() {
-	while port= read -p "Select container: " 
+	sudo ufw status numbered
+	while port= read -p "Select port: " 
 	do	
 		sudo ufw status numbered
 		if [ "$port" -eq "x"]; then
 			break
 		else
 			echo $port
+			sudo ufw status numbered
 		fi  
 	done
 }
