@@ -75,7 +75,7 @@ showNetwork() {
 
 removeNetwork() {
 	sudo ufw status numbered
-	while port= read -p "Select port or x to exit: " 
+	while [port= read -p "Select port or x to exit: "] || [ $port <> "x"] 
 	do	
 		sudo ufw status numbered
 		if [ "$port" == "x" ]; then
