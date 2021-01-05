@@ -168,7 +168,7 @@ do
 			"Show network")
 				showNetwork; break
 				;;
-			"Remove network")
+			"Remove port")
 				removeNetwork; break
 				;;
 			"Back")
