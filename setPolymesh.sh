@@ -54,7 +54,7 @@ destroyAllContainers() {
 }
 
 destroyContainer() {
-	lxd sql global "SELECT b.name, a.value "Size" FROM storage_pools_config a left join storage_pools b WHERE a.storage_pool_id=b.id and key='size'"
+	lxd list
 	read -p "Select container: " container
 	lxc stop $container || true
 	lxc delete $container || true
