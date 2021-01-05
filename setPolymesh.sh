@@ -80,6 +80,13 @@ removeNetwork() {
 	return $port
 }
 
+addPort() {
+	sudo ufw status numbered
+	read -p "Port number to add: " port
+	echo "y" | sudo ufw allow $port
+	return $port
+}
+
 ## Start containers
 startContainers(){
 	for Container in $operatorName $sentryaName $sentrybName 
@@ -153,7 +160,7 @@ submenuNetwork () {
 while true
 do
 	local PS3="Network: "
-	local options=("Configure network" "Show network" "Remove port" "Back")
+	local options=("Configure network" "Show network" "Remove port" "Add port" "Back")
 	local opt
 	select opt in "${options[@]}"
 	do
@@ -166,6 +173,9 @@ do
 				;;
 			"Remove port")
 				removeNetwork; break
+				;;
+			"Add port")
+				addPort; break
 				;;
 			"Back")
 				return
