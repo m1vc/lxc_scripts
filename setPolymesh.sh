@@ -49,13 +49,15 @@ destroyAllContainers() {
 		lxc stop $Container || true
     	lxc delete $Container
 	done
-	sudo ufw delete allow $sentryaP2Pport
-	sudo ufw delete allow $sentrybP2Pport
+	sudo ufw delete allow $sentryaP2Pport || true
+	sudo ufw delete allow $sentrybP2Pport || true
 }
 
 destroyContainer() {
-	lxc stop $1 
-	lxc delete $1
+	lxd sql global "SELECT b.name, a.value "Size" FROM storage_pools_config a left join storage_pools b WHERE a.storage_pool_id=b.id and key='size'"
+	read -p "Select container: " container
+	lxc stop $container || true
+	lxc delete $container || true
 }
 ## Configure network  
 configureNetwork() {
@@ -177,9 +179,7 @@ do
 				createContainers; break
 				;;
 			"Destroy container")
-				echo "Name of container to be destroyed"
-				read containerName
-				destroyContainer $containerName; break
+				destroyContainer; break
 				;;	
 			"Destroy all containers")
 				destroyAllContainers; break
