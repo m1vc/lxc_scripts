@@ -76,7 +76,13 @@ showNetwork() {
 removeNetwork() {
 	sudo ufw status numbered
 	read -p "Select port: " port
-	echo "y" | sudo ufw delete $port
+	if [[ $port != 1 ]] 
+		then
+			#echo "y" | sudo ufw delete $port
+			echo "diverso da uno"
+		else
+			echo "ssh port required"
+	fi
 	return $port
 }
 
