@@ -77,7 +77,9 @@ removeNetwork() {
 	sudo ufw status numbered
 	read -p "Select port or x to exit: " port
 	sudo ufw delete $port
+	return $port
 }
+
 ## Start containers
 startContainers(){
 	for Container in $operatorName $sentryaName $sentrybName 
