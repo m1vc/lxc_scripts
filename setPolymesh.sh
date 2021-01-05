@@ -46,7 +46,7 @@ createContainers() {
 destroyAllContainers() {
 	for Container in $operatorName $sentryaName $sentrybName 
 	do
-		lxc stop $Container 
+		lxc stop $Container || true
     	lxc delete $Container
 	done
 	sudo ufw delete allow $sentryaP2Pport
