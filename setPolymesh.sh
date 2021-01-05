@@ -75,8 +75,7 @@ showNetwork() {
 
 removeNetwork() {
 	sudo ufw status numbered
-	port = "port"
-
+	
 	while [[ $port != "x" ]] 
 	do	
 		sudo ufw status numbered
