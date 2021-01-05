@@ -69,10 +69,21 @@ configureNetwork() {
 }
 
 showNetwork() {
-	sudo ufw status
 	lxd sql global "SELECT  c.name, a.name, b.value FROM instances_devices a LEFT JOIN instances_devices_config b LEFT JOIN instances c WHERE a.id=b.instance_device_id AND a.instance_id = c.id AND a.type=8 AND b.key='listen';"
+	sudo ufw status numbered
 }
 
+removeNetwork() {
+	while port= read -p "Select container: " 
+	do	
+		sudo ufw status numbered
+		if [ "$port" -eq "x"]; then
+			break
+		else
+			echo $port
+		fi  
+	done
+}
 ## Start containers
 startContainers(){
 	for Container in $operatorName $sentryaName $sentrybName 
@@ -146,7 +157,7 @@ submenuNetwork () {
 while true
 do
 	local PS3="Network: "
-	local options=("Configure network" "Show network" "Back")
+	local options=("Configure network" "Show network" "Remove port" "Back")
 	local opt
 	select opt in "${options[@]}"
 	do
@@ -156,6 +167,9 @@ do
 				;;
 			"Show network")
 				showNetwork; break
+				;;
+			"Remove network")
+				removeNetwork; break
 				;;
 			"Back")
 				return
