@@ -54,7 +54,7 @@ destroyAllContainers() {
 }
 
 destroyContainer() {
-	lxd list
+	lxc list
 	read -p "Select container: " container
 	lxc stop $container || true
 	lxc delete $container || true
