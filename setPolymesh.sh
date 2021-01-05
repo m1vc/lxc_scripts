@@ -76,7 +76,7 @@ showNetwork() {
 removeNetwork() {
 	sudo ufw status numbered
 	read -p "Select port: " port
-	sudo ufw delete $port
+	echo "y" | sudo ufw delete $port
 	return $port
 }
 
