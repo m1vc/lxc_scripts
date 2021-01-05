@@ -78,7 +78,7 @@ removeNetwork() {
 	while port= read -p "Select port: " 
 	do	
 		sudo ufw status numbered
-		if [ "$port" -eq "x"]; then
+		if [ "$port" -eq 'x' ]; then
 			break
 		else
 			echo $port
