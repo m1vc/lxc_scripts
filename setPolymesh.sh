@@ -76,6 +76,15 @@ configureNetwork() {
 	openPort $sentrybName $sentrybP2Pport $p2pPort
 }
 
+configureNetworkContainer() {
+	read -p "Select container: " container
+	read -p "Select container IP: " containerIP
+	lxc config device set $container eth0 ipv4.address $containerIP 
+#	openPort $sentryaName $sentryaP2Pport $p2pPort
+#	openPort $sentrybName $sentrybP2Pport $p2pPort
+}
+
+
 showNetwork() {
 	lxd sql global "SELECT  c.name, a.name, b.value FROM instances_devices a LEFT JOIN instances_devices_config b LEFT JOIN instances c WHERE a.id=b.instance_device_id AND a.instance_id = c.id AND a.type=8 AND b.key='listen';"
 	sudo ufw status numbered
@@ -173,13 +182,16 @@ submenuNetwork () {
 while true
 do
 	local PS3="Network: "
-	local options=("Configure network" "Show network" "Remove port" "Add port" "Back")
+	local options=("Configure network" "Configure network for a specific container" "Show network" "Remove port" "Add port" "Back")
 	local opt
 	select opt in "${options[@]}"
 	do
 		case $opt in
 			"Configure network")
 				configureNetwork; break
+				;;
+			"Configure network for a specific container")
+				configureNetworkContainer; break
 				;;
 			"Show network")
 				showNetwork; break
