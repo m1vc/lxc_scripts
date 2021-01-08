@@ -36,11 +36,19 @@ createContainers() {
 	lxd sql global "SELECT b.name, a.value "Size" FROM storage_pools_config a left join storage_pools b WHERE a.storage_pool_id=b.id and key='size'"
 	read -p "Select storage: " storage
 
-	for Container in $operatorName $sentryaName $sentrybName 
+	for Container in $operatorName $sentryaName $sentrybName $ccxtName
 	do
 		lxc init ubuntu-minimal:bionic $Container -s $storage
 		lxc network attach lxdbr0 $Container eth0 eth0
 	done
+}
+
+createContainer() {
+	lxd sql global "SELECT b.name, a.value "Size" FROM storage_pools_config a left join storage_pools b WHERE a.storage_pool_id=b.id and key='size'"
+	read -p "Select storage: " storage
+	read -p "Container Name: " container
+	lxc init ubuntu-minimal:bionic $container -s $storage
+		lxc network attach lxdbr0 $container eth0 eth0
 }
 
 destroyAllContainers() {
@@ -78,8 +86,7 @@ removeNetwork() {
 	read -p "Select port: " port
 	if [[ $port != 1 ]] 
 		then
-			#echo "y" | sudo ufw delete $port
-			echo "diverso da uno"
+			echo "y" | sudo ufw delete $port
 		else
 			echo "ssh port required"
 	fi
@@ -203,6 +210,9 @@ do
 		case $opt in
 			"Create containers")
 				createContainers; break
+				;;
+			"Create container")
+				createContainer; break
 				;;
 			"Destroy container")
 				destroyContainer; break

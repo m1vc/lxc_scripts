@@ -14,3 +14,6 @@
     sentrybName=m1-sentry2
     sentrybIP=10.0.0.12
     sentrybP2Pport=30335
+    # Ccxt
+    ccxtName=m1-ccxt1p
+    ccxtIP=10.0.0.20
