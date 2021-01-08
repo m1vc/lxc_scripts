@@ -116,13 +116,21 @@ startContainers(){
 		lxc start $Container 
 	done
 }
+
+## Start containers
+startContainer(){
+	lxc list
+	read -p "Container to start: " container
+		lxc start $container 
+}
+
+
 ## Stop containers
 stopContainers(){
 	for Container in $operatorName $sentryaName $sentrybName 
 	do
 		lxc stop $Container 
 	done
-	echo "Containers started"
 }
 
 ## Install binaries and create users
@@ -215,7 +223,7 @@ submenuContainers () {
 while true
 do
 	local PS3="Containers: "
-	local options=("Create containers" "Create container" "Destroy container" "Destroy all containers" "List containers" "Back")
+	local options=("Create containers" "Create container" "Destroy container" "Destroy all containers" "List containers" "Start container" "Back")
 	local opt
 	select opt in "${options[@]}"
 	do
@@ -234,6 +242,9 @@ do
 				;;	
 			"List containers")
 				lxc list; break
+				;;	
+			"Start container")
+				startContainer; break
 				;;	
 			"Back")
 				return
